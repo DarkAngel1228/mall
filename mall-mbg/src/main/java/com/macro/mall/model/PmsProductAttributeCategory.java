@@ -1,5 +1,6 @@
 package com.macro.mall.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 public class PmsProductAttributeCategory implements Serializable {
@@ -7,8 +8,10 @@ public class PmsProductAttributeCategory implements Serializable {
 
     private String name;
 
+    @ApiModelProperty(value = "属性数量")
     private Integer attributeCount;
 
+    @ApiModelProperty(value = "参数数量")
     private Integer paramCount;
 
     private static final long serialVersionUID = 1L;
