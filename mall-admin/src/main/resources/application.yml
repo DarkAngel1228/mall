@@ -9,3 +9,10 @@ mybatis:
     - classpath*:com/**/mapper/*.xml
 server:
   port: 8088
+redis:
+  database: mall
+  key:
+    admin: 'ums:admin'
+    resourceList: 'ums:resourceList'
+  expire:
+    common: 86400 # 24Сʱ
