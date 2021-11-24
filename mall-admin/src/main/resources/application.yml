@@ -1,5 +1,11 @@
 spring:
   application:
     name: mall-admin
+  profiles:
+    active: dev #默认为开发环境
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
 server:
   port: 8088
