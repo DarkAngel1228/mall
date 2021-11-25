@@ -4,12 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import com.macro.mall.bo.AdminUserDetails;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.dao.UmsAdminRoleRelationDao;
+import com.macro.mall.mapper.UmsAdminLoginLogMapper;
 import com.macro.mall.mapper.UmsAdminMapper;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsAdminExample;
+import com.macro.mall.model.UmsAdminLoginLog;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.security.util.JwtTokenUtil;
 import com.macro.mall.service.UmsAdminService;
+import com.macro.mall.common.util.RequestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +37,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UmsAdminMapper adminMapper;
+    @Autowired
+    private UmsAdminLoginLogMapper loginLogMapper;
     @Autowired
     private UmsAdminRoleRelationDao adminRoleRelationDao;
     @Autowired
@@ -48,8 +57,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
-            // updateLoginTimeByUsername(username);
-            // TODO insertLoginLog(username);
+            // TODO updateLoginTimeByUsername(username);
+            insertLoginLog(username);
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常：{}", e.getMessage());
         }
@@ -92,4 +101,19 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return resourceList;
     }
 
+    /**
+     * 添加登录记录
+     * @param username 用户名
+     */
+    private void insertLoginLog(String username) {
+        UmsAdmin admin = getAdminByUsername(username);
+        if (admin == null) return;
+        UmsAdminLoginLog loginLog = new UmsAdminLoginLog();
+        loginLog.setAdminId(admin.getId());
+        loginLog.setCreateTime(new Date());
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        loginLog.setIp(RequestUtil.getRequestIp(request));
+        loginLogMapper.insert(loginLog);
+    }
 }
