@@ -7,10 +7,7 @@ import com.macro.mall.dao.UmsAdminRoleRelationDao;
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.mapper.UmsAdminLoginLogMapper;
 import com.macro.mall.mapper.UmsAdminMapper;
-import com.macro.mall.model.UmsAdmin;
-import com.macro.mall.model.UmsAdminExample;
-import com.macro.mall.model.UmsAdminLoginLog;
-import com.macro.mall.model.UmsResource;
+import com.macro.mall.model.*;
 import com.macro.mall.security.util.JwtTokenUtil;
 import com.macro.mall.service.UmsAdminService;
 import com.macro.mall.common.util.RequestUtil;
@@ -121,6 +118,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         admin.setPassword(encodePassword);
         adminMapper.insert(admin);
         return admin;
+    }
+
+    @Override
+    public List<UmsRole> getRoleList(Long adminId) {
+        return adminRoleRelationDao.getRoleList(adminId);
     }
 
     /**

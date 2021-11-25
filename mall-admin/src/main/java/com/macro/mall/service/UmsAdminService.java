@@ -3,6 +3,7 @@ package com.macro.mall.service;
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsResource;
+import com.macro.mall.model.UmsRole;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -45,6 +46,11 @@ public interface UmsAdminService {
      */
     UmsAdmin register(UmsAdminParam umsAdminParam);
 
-
+    /**
+     * 获取用户对应角色
+     * @param adminId 后台管理员id
+     * @return
+     */
+    List<UmsRole> getRoleList(Long adminId);
 }
 
