@@ -59,7 +59,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
-            // TODO updateLoginTimeByUsername(username);
+            updateLoginTimeByUsername(username);
             insertLoginLog(username);
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常：{}", e.getMessage());
@@ -140,5 +140,16 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
 
+    /**
+     * 根据用户修改登录时间
+     * @param username 用户名
+     */
+    private void updateLoginTimeByUsername(String username) {
+        UmsAdmin record = new UmsAdmin();
+        record.setLoginTime(new Date());
+        UmsAdminExample example = new UmsAdminExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        adminMapper.updateByExampleSelective(record, example);
+    }
 
 }

@@ -44,5 +44,7 @@ public interface UmsAdminService {
      * @return token
      */
     UmsAdmin register(UmsAdminParam umsAdminParam);
+
+
 }
 
