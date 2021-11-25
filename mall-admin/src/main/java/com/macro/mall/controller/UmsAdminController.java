@@ -2,6 +2,8 @@ package com.macro.mall.controller;
 
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.UmsAdminLoginParam;
+import com.macro.mall.dto.UmsAdminParam;
+import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.service.UmsAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +31,21 @@ public class UmsAdminController {
 
     @Autowired
     private UmsAdminService adminService;
+
+
+    @ApiOperation(value = "用户注册")
+    @PostMapping(value = "/register")
+    @ResponseBody
+    public CommonResult<UmsAdmin> register(@Validated @RequestBody UmsAdminParam umsAdminParam) {
+        UmsAdmin umsAdmin = adminService.register(umsAdminParam);
+        if (umsAdmin == null) {
+            return CommonResult.failed("注册失败");
+        }
+        return CommonResult.success(umsAdmin);
+    }
+
+
+
 
     @ApiOperation(value = "登录以后返回token")
     @PostMapping(value = "/login")

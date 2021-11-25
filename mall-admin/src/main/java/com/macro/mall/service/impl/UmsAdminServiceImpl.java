@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.macro.mall.bo.AdminUserDetails;
 import com.macro.mall.common.exception.Asserts;
 import com.macro.mall.dao.UmsAdminRoleRelationDao;
+import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.mapper.UmsAdminLoginLogMapper;
 import com.macro.mall.mapper.UmsAdminMapper;
 import com.macro.mall.model.UmsAdmin;
@@ -15,6 +16,7 @@ import com.macro.mall.service.UmsAdminService;
 import com.macro.mall.common.util.RequestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -101,6 +103,26 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return resourceList;
     }
 
+    @Override
+    public UmsAdmin register(UmsAdminParam umsAdminParam) {
+        UmsAdmin admin = new UmsAdmin();
+        BeanUtils.copyProperties(umsAdminParam, admin);
+        admin.setCreateTime(new Date());
+        admin.setStatus(1);
+        // 查询是否有相同用户名的用户
+        UmsAdminExample example = new UmsAdminExample();
+        example.createCriteria().andUsernameEqualTo(umsAdminParam.getUsername());
+        List<UmsAdmin> umsAdminList = adminMapper.selectByExample(example);
+        if (umsAdminList.size() > 0) {
+            return null;
+        }
+        // 将密码进行加密操作
+        String encodePassword = passwordEncoder.encode(umsAdminParam.getPassword());
+        admin.setPassword(encodePassword);
+        adminMapper.insert(admin);
+        return admin;
+    }
+
     /**
      * 添加登录记录
      * @param username 用户名
@@ -116,4 +138,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         loginLog.setIp(RequestUtil.getRequestIp(request));
         loginLogMapper.insert(loginLog);
     }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.macro.mall.service;
 
+import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsResource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,5 +37,12 @@ public interface UmsAdminService {
      * @return url列表
      */
     List<UmsResource> getResourceList(Long adminId);
+
+    /**
+     * 注册
+     * @param umsAdminParam 用户名/密码
+     * @return token
+     */
+    UmsAdmin register(UmsAdminParam umsAdminParam);
 }
 
