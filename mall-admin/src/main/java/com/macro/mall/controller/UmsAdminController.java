@@ -7,7 +7,7 @@ import com.macro.mall.dto.UmsAdminLoginParam;
 import com.macro.mall.dto.UmsAdminParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsRole;
-import com.macro.mall.service.RoleService;
+import com.macro.mall.service.UmsRoleService;
 import com.macro.mall.service.UmsAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +36,7 @@ public class UmsAdminController {
     @Autowired
     private UmsAdminService adminService;
     @Autowired
-    private RoleService roleService;
+    private UmsRoleService roleService;
 
 
     @ApiOperation(value = "用户注册")
