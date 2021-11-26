@@ -12,10 +12,12 @@ import com.macro.mall.service.UmsAdminCacheService;
 import com.macro.mall.service.UmsAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     @Autowired
     private UmsAdminService adminService;
