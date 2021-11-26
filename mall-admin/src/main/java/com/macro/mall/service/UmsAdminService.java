@@ -64,7 +64,22 @@ public interface UmsAdminService {
     List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
 
 
+    /**
+     * 修改用户角色关系
+     * @param adminId 管理员id
+     * @param roleIds 角色id数组
+     * @return count
+     */
     @Transactional
     int updateRole(Long adminId, List<Long> roleIds);
+
+
+    /**
+     * 修改指定用户信息
+     * @param adminId 管理员id
+     * @param admin 管理员信息
+     * @return count
+     */
+    int update(Long adminId, UmsAdmin admin);
 }
 

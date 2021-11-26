@@ -2,7 +2,9 @@ package com.macro.mall.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.util.StringUtil;
 import com.macro.mall.mapper.UmsAdminRoleRelationMapper;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -164,6 +166,28 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         }
         // TODO adminCacheService
         return count;
+    }
+
+    @Override
+    public int update(Long adminId, UmsAdmin admin) {
+        admin.setId(adminId);
+        UmsAdmin rawAdmin = adminMapper.selectByPrimaryKey(adminId);
+        if (rawAdmin.getPassword().equals(admin.getPassword())) {
+            // 与原加密密码相同的不需要修改
+            admin.setPassword(null);
+        } else {
+            // 与原加密密码不同的需要加密修改
+            if (StrUtil.isEmpty(admin.getPassword())) {
+                admin.setPassword(null);
+            } else {
+                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+            }
+        }
+        int count = adminMapper.updateByPrimaryKeySelective(admin);
+        // TODO adminCacheService.delAdmin(admin);
+        return count;
+
+
     }
 
     /**
