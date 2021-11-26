@@ -1,6 +1,7 @@
 package com.macro.mall.service;
 
 import com.macro.mall.dto.UmsAdminParam;
+import com.macro.mall.dto.UpdateAdminPasswordParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.model.UmsRole;
@@ -89,5 +90,21 @@ public interface UmsAdminService {
      * @return count
      */
     int delete(Long adminId);
+
+
+    /**
+     * 刷新token
+     * @param oldToken 旧的token
+     * @return 生成的jwt的token
+     */
+    String refreshToken(String oldToken);
+
+    /**
+     * 修改密码
+     * @param updateAdminPasswordParam 密码
+     * @return count
+     */
+    int updatePassword(UpdateAdminPasswordParam updateAdminPasswordParam);
+
 }
 

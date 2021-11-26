@@ -5,6 +5,7 @@ import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.UmsAdminLoginParam;
 import com.macro.mall.dto.UmsAdminParam;
+import com.macro.mall.dto.UpdateAdminPasswordParam;
 import com.macro.mall.model.UmsAdmin;
 import com.macro.mall.model.UmsRole;
 import com.macro.mall.service.UmsRoleService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -160,4 +162,39 @@ public class UmsAdminController {
         }
         return CommonResult.failed();
     }
+
+    @ApiOperation(value = "刷新token")
+    @GetMapping(value = "/refreshToken")
+    @ResponseBody
+    public CommonResult refreshToken(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String refreshToken = adminService.refreshToken(token);
+        if (refreshToken == null) {
+            return CommonResult.failed("token已经过期！");
+        }
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", refreshToken);
+        tokenMap.put("tokenHead", tokenHead);
+        return CommonResult.success(tokenMap);
+    }
+
+
+    @ApiOperation(value = "修改指定用户密码")
+    @PostMapping(value = "/updatePassword")
+    @ResponseBody
+    public CommonResult updatePassword(@Validated @RequestBody UpdateAdminPasswordParam updateAdminPasswordParam) {
+        int status = adminService.updatePassword(updateAdminPasswordParam);
+        if (status > 0) {
+            return  CommonResult.success(status);
+        } else if (status == -1) {
+            return CommonResult.failed("提交参数不合法");
+        } else if (status == -2) {
+            return CommonResult.failed("找不到该用户");
+        } else if (status == -3) {
+            return CommonResult.failed("旧密码错误");
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
 }
