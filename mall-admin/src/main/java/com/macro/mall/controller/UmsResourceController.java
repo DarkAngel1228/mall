@@ -10,10 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,5 +43,53 @@ public class UmsResourceController {
     public CommonResult<List<UmsResource>> listAll() {
         List<UmsResource> resourceList = resourceService.listAll();
         return CommonResult.success(resourceList);
+    }
+
+    @ApiOperation("添加后台资源")
+    @PostMapping(value = "/create")
+    @ResponseBody
+    public CommonResult create(@RequestBody UmsResource umsResource) {
+        int count = resourceService.create(umsResource);
+        dynamicSecurityMetadataSource.clearDataSource();
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("修改后台资源")
+    @PostMapping(value = "/update/{id}")
+    @ResponseBody
+    public CommonResult update(@PathVariable Long id,
+                               @RequestBody UmsResource umsResource) {
+        int count = resourceService.update(id, umsResource);
+        dynamicSecurityMetadataSource.clearDataSource();
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("根据id获取资源详情")
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    public CommonResult<UmsResource> getItem(@PathVariable Long id) {
+        UmsResource umsResource = resourceService.getItem(id);
+        return CommonResult.success(umsResource);
+    }
+
+    @ApiOperation("根据id删除后台资源")
+    @RequestMapping(value = "/delete/{id}")
+    @ResponseBody
+    public CommonResult delete(@PathVariable Long id) {
+        int count = resourceService.delete(id);
+        dynamicSecurityMetadataSource.clearDataSource();
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
     }
 }
