@@ -1,14 +1,17 @@
 package com.macro.mall.controller;
 
+import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.model.UmsRole;
 import com.macro.mall.service.UmsRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.jsqlparser.statement.select.First;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -26,5 +29,15 @@ public class UmsRoleController {
     public CommonResult<List<UmsRole>> listAll() {
         List<UmsRole> roleList = roleService.list();
         return CommonResult.success(roleList);
+    }
+
+
+    @ApiOperation("")
+    @GetMapping(value = "/list")
+    @ResponseBody
+    public CommonResult<CommonPage<UmsRole>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                  @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize, @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        List<UmsRole> roleList = roleService.list(keyword, pageSize, pageNum);
+        return CommonResult.success(CommonPage.restPage(roleList));
     }
 }
