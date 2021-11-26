@@ -1,6 +1,7 @@
 package com.macro.mall.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.UmsAdminLoginParam;
 import com.macro.mall.dto.UmsAdminParam;
@@ -88,5 +89,14 @@ public class UmsAdminController {
         }
 
         return CommonResult.success(data);
+    }
+    @ApiOperation(value = "根据用户名或姓名分页获取用户列表")
+    @GetMapping(value = "list")
+    @ResponseBody
+    public CommonResult<CommonPage<UmsAdmin>> list(@RequestParam(value = "keyword", required = false) String keyword,
+                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        List<UmsAdmin> umsAdminList = adminService.list(keyword, pageSize, pageNum);
+        return CommonResult.success(CommonPage.restPage(umsAdminList));
     }
 }
