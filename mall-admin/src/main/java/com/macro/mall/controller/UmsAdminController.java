@@ -132,4 +132,22 @@ public class UmsAdminController {
         return  CommonResult.failed();
     }
 
+    @ApiOperation(value = "修改指定用户信息")
+    @PostMapping(value = "update/{id}")
+    @ResponseBody
+    public CommonResult update(@PathVariable Long id, @RequestBody UmsAdmin admin) {
+        int count = adminService.update(id, admin);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "登出功能")
+    @PostMapping(value = "/logout")
+    @ResponseBody
+    public CommonResult logout() {
+        return CommonResult.success(null);
+    }
+
 }
