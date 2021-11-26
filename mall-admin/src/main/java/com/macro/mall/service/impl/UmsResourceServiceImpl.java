@@ -1,5 +1,7 @@
 package com.macro.mall.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.PageHelper;
 import com.macro.mall.mapper.UmsResourceMapper;
 import com.macro.mall.model.UmsResource;
 import com.macro.mall.model.UmsResourceExample;
@@ -36,7 +38,19 @@ public class UmsResourceServiceImpl implements UmsResourceService {
 
     @Override
     public List<UmsResource> list(Long categoryId, String nameKeyword, String urlKeyword, Integer pageSize, Integer pageNum) {
-        return null;
+        PageHelper.startPage(pageNum, pageSize);
+        UmsResourceExample example = new UmsResourceExample();
+        UmsResourceExample.Criteria criteria = example.createCriteria();
+        if (categoryId != null) {
+            criteria.andCategoryIdEqualTo(categoryId);
+        }
+        if (StrUtil.isNotEmpty(nameKeyword)) {
+            criteria.andNameLike("%" + nameKeyword + "%");
+        }
+        if (StrUtil.isNotEmpty(urlKeyword)) {
+            criteria.andUrlLike("%" + urlKeyword + "%");
+        }
+        return resourceMapper.selectByExample(example);
     }
 
     @Override
