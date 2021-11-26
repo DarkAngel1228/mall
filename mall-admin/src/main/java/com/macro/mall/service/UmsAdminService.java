@@ -106,5 +106,12 @@ public interface UmsAdminService {
      */
     int updatePassword(UpdateAdminPasswordParam updateAdminPasswordParam);
 
+
+    /**
+     * 根据用户id获取用户
+     * @param adminId 管理员id
+     * @return 用户信息
+     */
+    UmsAdmin getItem(Long adminId);
 }
 

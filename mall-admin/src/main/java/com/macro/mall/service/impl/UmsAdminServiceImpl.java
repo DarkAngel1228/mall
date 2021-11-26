@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.macro.mall.dto.UpdateAdminPasswordParam;
 import com.macro.mall.mapper.UmsAdminRoleRelationMapper;
+import com.macro.mall.service.UmsAdminCacheService;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.macro.mall.bo.AdminUserDetails;
@@ -51,6 +52,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private UmsAdminRoleRelationDao adminRoleRelationDao;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UmsAdminCacheService adminCacheService;
     @Override
     public String login(String username, String password) {
         String token = null;
@@ -86,14 +89,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
-        UmsAdmin admin = null;
-        // TODO adminCacheService
+        UmsAdmin admin = adminCacheService.getAdmin(username);
+        if (admin != null) return admin;
         UmsAdminExample example = new UmsAdminExample();
         example.createCriteria().andUsernameEqualTo(username);
         List<UmsAdmin> adminList = adminMapper.selectByExample(example);
         if (adminList != null && adminList.size() > 0) {
             admin = adminList.get(0);
-            // TODO adminCacheService
+            adminCacheService.setAdmin(admin);
             return admin;
         }
         return null;
@@ -101,10 +104,13 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsResource> getResourceList(Long adminId) {
-        // TODO adminCacheService
-        List<UmsResource> resourceList = adminRoleRelationDao.getResourceList(adminId);
+        List<UmsResource> resourceList = adminCacheService.getResourceList(adminId);
         if (CollUtil.isNotEmpty(resourceList)) {
-            // TODO adminCacheService
+            return resourceList;
+        }
+        resourceList = adminRoleRelationDao.getResourceList(adminId);
+        if (CollUtil.isNotEmpty(resourceList)) {
+            adminCacheService.setResourceList(adminId, resourceList);
         }
         return resourceList;
     }
@@ -163,7 +169,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             }
             adminRoleRelationDao.insertList(list);
         }
-        // TODO adminCacheService
+        adminCacheService.delResourceList(adminId);
         return count;
     }
 
@@ -183,7 +189,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             }
         }
         int count = adminMapper.updateByPrimaryKeySelective(admin);
-        // TODO adminCacheService.delAdmin(admin);
+        adminCacheService.delAdmin(adminId);
         return count;
 
 
@@ -191,9 +197,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public int delete(Long adminId) {
-        // TODO adminCacheService.delAdmin(id)
+        adminCacheService.delAdmin(adminId);
         int count = adminMapper.deleteByPrimaryKey(adminId);
-        // TODO adminCacheService.delResourceList(adminId);
+        adminCacheService.delResourceList(adminId);
         return count;
     }
 
@@ -219,8 +225,13 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         }
         umsAdmin.setPassword(passwordEncoder.encode(param.getNewPassword()));
         adminMapper.updateByPrimaryKey(umsAdmin);
-        // TODO adminCacheService.delAdmin(umsAdmin.getId());
+        adminCacheService.delAdmin(umsAdmin.getId());
         return -1;
+    }
+
+    @Override
+    public UmsAdmin getItem(Long adminId) {
+        return adminMapper.selectByPrimaryKey(adminId);
     }
 
     /**
