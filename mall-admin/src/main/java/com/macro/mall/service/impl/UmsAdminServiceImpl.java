@@ -1,10 +1,8 @@
 package com.macro.mall.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.util.StringUtil;
 import com.macro.mall.mapper.UmsAdminRoleRelationMapper;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -188,6 +186,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return count;
 
 
+    }
+
+    @Override
+    public int delete(Long adminId) {
+        // TODO adminCacheService.delAdmin(id)
+        int count = adminMapper.deleteByPrimaryKey(adminId);
+        // TODO adminCacheService.delResourceList(adminId);
+        return count;
     }
 
     /**

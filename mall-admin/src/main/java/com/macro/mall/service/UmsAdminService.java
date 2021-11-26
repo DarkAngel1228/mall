@@ -81,5 +81,13 @@ public interface UmsAdminService {
      * @return count
      */
     int update(Long adminId, UmsAdmin admin);
+
+
+    /**
+     * 删除指定用户
+     * @param adminId 管理员id
+     * @return count
+     */
+    int delete(Long adminId);
 }
 
