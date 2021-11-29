@@ -1,6 +1,10 @@
 spring:
   application:
     name: mall-admin
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB #限制文件上传大小为10M
   profiles:
     active: dev #默认为开发环境
 mybatis:
@@ -52,3 +56,8 @@ aliyun:
     callback: http://localhost:8088/aliyun/oss/callback # 文件上传成功后的回调地址
     dir:
       prefix: test/images/ # 上传文件夹路径前缀
+minio:
+  endpoint: http://localhost:9090 #MinIO服务所在地址
+  bucketName: mall #存储桶名称
+  accessKey: minioadmin #访问的key
+  secretKey: minioadmin #访问的秘钥
