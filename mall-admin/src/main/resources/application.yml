@@ -44,7 +44,7 @@ aliyun:
   oss:
     endpoint: oss-cn-beijing.aliyuncs.com # oss对外服务的访问域名
     accessKeyId: LTAIFBmdAKtodfB7 # 访问身份验证中用到用户标识
-    accessKeySecret: Sst1zsT4lGB7S8WRWW1XCUDbOcagc2 # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    accessKeySecret: Sst1zsT4lGB7S8WRWW2XCUDbOcagc1 # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
     bucketName: team-ehwi71mv # oss的存储空间
     policy:
       expire: 300 # 签名有效期(S)
