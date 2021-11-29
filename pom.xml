@@ -43,6 +43,7 @@
         <mysql-connector.version>8.0.20</mysql-connector.version>
         <jjwt.version>0.9.0</jjwt.version>
         <hutool.version>5.4.0</hutool.version>
+        <aliyun-oss.version>2.5.0</aliyun-oss.version>
     </properties>
     <dependencies>
         <dependency>
@@ -150,6 +151,12 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+            <!-- 阿里云OSS -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-oss.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
