@@ -50,7 +50,8 @@ public class LocalFileController {
         }
         model.addAttribute("filename", fileName);
         Map<String, String> fileMap = new HashMap<>();
-        fileMap.put("path", "http://localhost:8088/" +  fileName);
+        fileMap.put("url", "http://localhost:8088/" + fileName);
+        fileMap.put("name", fileName);
         return CommonResult.success(fileMap);
     }
 }
