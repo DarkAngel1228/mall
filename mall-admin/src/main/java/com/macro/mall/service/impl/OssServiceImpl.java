@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -34,7 +35,7 @@ public class OssServiceImpl implements OssService {
     @Value("${aliyun.oss.endpoint}")
     private String ALIYUN_OSS_ENDPOINT;
     @Value("${aliyun.oss.dir.prefix}")
-    private String ALIYUN_OSS_dir_PREFIX;
+    private String ALIYUN_OSS_DIR_PREFIX;
 
     @Autowired
     private OSSClient ossClient;
@@ -45,12 +46,12 @@ public class OssServiceImpl implements OssService {
         OssPolicyResult result = new OssPolicyResult();
         // 存储目录
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String dir = ALIYUN_OSS_dir_PREFIX + sdf.format(new Date());
+        String dir = ALIYUN_OSS_DIR_PREFIX + sdf.format(new Date());
         // 签名有效期
-        Long expireEndTime = System.currentTimeMillis() + ALIYUN_OSS_EXPIRE * 1000;
+        long expireEndTime = System.currentTimeMillis() + ALIYUN_OSS_EXPIRE * 1000;
         Date expiration = new Date(expireEndTime);
         // 文件大小
-        Long maxSize = ALIYUN_OSS_MAX * 1024 * 1024;
+        long maxSize = ALIYUN_OSS_MAX * 1024 * 1024;
         // 回调
         OssCallbackParam callback = new OssCallbackParam();
         callback.setCallbackUrl(ALIYUN_OSS_CALLBACK);
@@ -63,7 +64,7 @@ public class OssServiceImpl implements OssService {
             policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, maxSize);
             policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
             String postPolicy = ossClient.generatePostPolicy(expiration, policyConditions);
-            byte[] binaryData = postPolicy.getBytes("UTF-8");
+            byte[] binaryData = postPolicy.getBytes(StandardCharsets.UTF_8);
             String policy = BinaryUtil.toBase64String(binaryData);
             String signature = ossClient.calculatePostSignature(postPolicy);
             String callbackData = BinaryUtil.toBase64String(JSONUtil.parse(callback).toString().getBytes("UTF-8"));

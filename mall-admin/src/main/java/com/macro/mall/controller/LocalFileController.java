@@ -3,6 +3,7 @@ package com.macro.mall.controller;
 import com.macro.mall.common.api.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,11 @@ import java.util.UUID;
 @Api(tags = "LocalFileController", description = "本地上传管理")
 @RequestMapping("/file/local")
 public class LocalFileController {
+    @Value("${file.path}")
+    private String dirPath;
     @GetMapping(value = "/file")
     public String file() {
+
         return "file";
     }
 
@@ -32,9 +36,10 @@ public class LocalFileController {
         }
         String fileName = file.getOriginalFilename();  // 文件名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
-        String filePath = System.getProperty("user.dir") + "//images//"; // 上传后的路径
+        //String filePath = System.getProperty("user.dir") + "/images/"; // 上传后的路径
         fileName = UUID.randomUUID() + suffixName; // 新文件名
-        File dest = new File(filePath + fileName);
+        System.out.println(dirPath);
+        File dest = new File(dirPath + fileName);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
@@ -43,11 +48,9 @@ public class LocalFileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String filename = "/images/" + fileName;
-        model.addAttribute("filename", filename);
-
+        model.addAttribute("filename", fileName);
         Map<String, String> fileMap = new HashMap<>();
-        fileMap.put("path", fileName);
+        fileMap.put("path", "http://localhost:8088/" +  fileName);
         return CommonResult.success(fileMap);
     }
 }
