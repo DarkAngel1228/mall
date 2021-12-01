@@ -2,6 +2,7 @@ package com.macro.mall.controller;
 
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
+import com.macro.mall.dto.PmsProductAttributeParam;
 import com.macro.mall.dto.ProductAttrInfo;
 import com.macro.mall.model.PmsProductAttribute;
 import com.macro.mall.service.PmsProductAttributeService;
@@ -32,6 +33,51 @@ public class PmsProductAttributeController {
                                                                  @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<PmsProductAttribute> pmsProductAttributeList = productAttributeService.getList(cid, type, pageSize, pageNum);
         return CommonResult.success(CommonPage.restPage(pmsProductAttributeList));
+    }
+
+    @ApiOperation("添加商品属性信息")
+    @PostMapping(value = "/create")
+    @ResponseBody
+    public CommonResult create(@RequestBody PmsProductAttributeParam productAttributeParam) {
+        int count = productAttributeService.create(productAttributeParam);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("修改商品属性信息")
+    @PostMapping(value = "/update/{id}")
+    @ResponseBody
+    public CommonResult update(@PathVariable Long id,
+                               @RequestBody PmsProductAttributeParam productAttributeParam) {
+        int count = productAttributeService.update(id, productAttributeParam);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("查询当个商品属性")
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    public CommonResult<PmsProductAttribute> getItem(@PathVariable Long id) {
+        PmsProductAttribute productAttribute = productAttributeService.getItem(id);
+        return CommonResult.success(productAttribute);
+    }
+
+    @ApiOperation("批量删除商品属性")
+    @PostMapping(value = "/delete")
+    @ResponseBody
+    public CommonResult delete(@RequestParam("ids") List<Long> ids) {
+        int count = productAttributeService.delete(ids);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
     }
 
     @ApiOperation("根据商品分类的id获取商品属性及属性分类")
