@@ -1,11 +1,13 @@
-package com.macro.mall.dto;
+package com.macro.mall.common.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Controller层的日志封装类
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class WebLog {
     /**
      * 操作描述

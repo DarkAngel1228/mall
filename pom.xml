@@ -45,6 +45,7 @@
         <hutool.version>5.4.0</hutool.version>
         <aliyun-oss.version>2.5.0</aliyun-oss.version>
         <minio.version>7.1.0</minio.version>
+        <logstash-logback.version>5.3</logstash-logback.version>
     </properties>
     <dependencies>
         <dependency>
@@ -169,7 +170,12 @@
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
-
+            <!--集成logstash-->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
