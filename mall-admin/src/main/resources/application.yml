@@ -11,7 +11,8 @@ spring:
     active: dev #默认为开发环境
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file.path}
-
+  jackson:
+    time-zone: Asia/Shanghai
 mybatis:
   mapper-locations:
     - classpath:dao/*.xml

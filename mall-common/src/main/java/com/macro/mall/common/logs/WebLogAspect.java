@@ -43,13 +43,13 @@ public class WebLogAspect {
     public void webLog() {
     }
 
-    @Before("webLog()")
-    public void doBefore(JoinPoint joinPoint) throws Throwable {
-    }
-
-    @AfterReturning(value = "webLog()", returning = "ret")
-    public void doAfterReturning(Object ret) throws Throwable {
-    }
+//    @Before("webLog()")
+//    public void doBefore(JoinPoint joinPoint) throws Throwable {
+//    }
+//
+//    @AfterReturning(value = "webLog()", returning = "ret")
+//    public void doAfterReturning(Object ret) throws Throwable {
+//    }
 
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -85,6 +85,8 @@ public class WebLogAspect {
         logMap.put("parameter",webLog.getParameter());
         logMap.put("spendTime",webLog.getSpendTime());
         logMap.put("description",webLog.getDescription());
+        logMap.put("timestamp",webLog.getStartTime());
+
 //        LOGGER.info("{}", JSONUtil.parse(webLog));
         LOGGER.info(Markers.appendEntries(logMap), JSONUtil.parse(webLog).toString());
         return result;
