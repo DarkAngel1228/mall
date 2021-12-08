@@ -13,6 +13,8 @@ spring:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${file.path}
   jackson:
     time-zone: Asia/Shanghai
+  redis:
+    timeout: 60
 mybatis:
   mapper-locations:
     - classpath:dao/*.xml
